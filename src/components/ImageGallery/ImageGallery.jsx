@@ -41,6 +41,7 @@ export class ImageGallery extends Component {
         try {
             const { data } = await axios.get(URL);
             console.log(data);
+            this.setState({ images: data });
         } catch (error) {
             console.log(error)
         } finally {
@@ -49,21 +50,21 @@ export class ImageGallery extends Component {
     }
 
     render() {
-        const { isLoading } = this.state;
+        const { isLoading, images } = this.state;
+        console.log(images);
 
         return (
             <>
                 {isLoading && <Loader />}
                 <Gallery>
-                    Hello!!!
-                    {/* {hits.map(({ id, webformatURL, largeImageURL }) => (
+                    {images && images.hits.map(({ id, webformatURL, largeImageURL }) => (
                         <ImageGalleryItem
                             key={id}
                             id={id}
                             webformatURL={webformatURL}
                             largeImageURL={largeImageURL}
                         />
-                    ))} */}
+                    ))}
                 </Gallery>
             </>
         )
