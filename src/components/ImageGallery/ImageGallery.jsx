@@ -11,22 +11,6 @@ export class ImageGallery extends Component {
         isLoading: false,
     }
 
-    // componentDidMount() {
-    //     const BASE_URL = 'https://pixabay.com/api';
-    //     const API_KEY = '31433732-587fed4cb039ee24c3149a17c';
-    //     const page = 1;
-    //     const perPage = 12;
-    //     const searchQuery = 'forest';
-
-    //     const URL = `${BASE_URL}/?key=${API_KEY}&q=${searchQuery}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=${perPage}`;
-
-    //     fetch(URL)
-    //         .then(response => response.json())
-    //         .then(
-    //             images => this.setState({ images })
-    //         )
-    // }
-
     async componentDidMount() {
         const BASE_URL = 'https://pixabay.com/api';
         const API_KEY = '31433732-587fed4cb039ee24c3149a17c';
@@ -34,13 +18,12 @@ export class ImageGallery extends Component {
         const perPage = 12;
         const searchQuery = 'forest';
 
-        const URL = `${BASE_URL}/?key=${API_KEY}&q=${searchQuery}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=${perPage}`;
+        const URL = `${BASE_URL}/?q=${searchQuery}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=${perPage}`;
 
         this.setState({ isLoading: true });
 
         try {
             const { data } = await axios.get(URL);
-            console.log(data);
             this.setState({ images: data });
         } catch (error) {
             console.log(error)
@@ -51,18 +34,15 @@ export class ImageGallery extends Component {
 
     render() {
         const { isLoading, images } = this.state;
-        console.log(images);
 
         return (
             <>
                 {isLoading && <Loader />}
                 <Gallery>
-                    {images && images.hits.map(({ id, webformatURL, largeImageURL }) => (
+                    {images?.hits.map((image) => (
                         <ImageGalleryItem
-                            key={id}
-                            id={id}
-                            webformatURL={webformatURL}
-                            largeImageURL={largeImageURL}
+                            key={image.id}
+                            image={image}
                         />
                     ))}
                 </Gallery>
@@ -74,9 +54,7 @@ export class ImageGallery extends Component {
 // ImageGallery.propTypes = {
 //     images: PropTypes.arrayOf(
 //         PropTypes.shape({
-//             id: PropTypes.string.isRequired,
-//             webformatURL: PropTypes.string.isRequired,
-//             largeImageURL: PropTypes.string.isRequired,
+//             id: PropTypes.number.isRequired,
 //         }).isRequired
 //     ).isRequired
 // }

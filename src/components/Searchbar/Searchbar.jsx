@@ -1,5 +1,6 @@
 import { Component } from "react";
 import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
 import { SearchBar, SearchForm, SearchForm_button, SearchForm_buttonLabel, SearchForm_input } from "./Searchbar.styled";
 
 export class Searchbar extends Component {
@@ -8,29 +9,33 @@ export class Searchbar extends Component {
     // };
     
     state = {
-        // name: "",
-        // number: "",
+        queryName: '',
     }
 
-    handleInput = (event) => {
-        const { name, value } = event.currentTarget;  
-        this.setState({[name]: value})
+    handleNameChange = event => {
+        this.setState({ queryName: event.currentTarget.value.toLowerCase() });
     }
 
-    handleSubmit = (event) => {
+    handleSubmit = event => {
         event.preventDefault();
-        this.props.onSubmit(this.state, this.reset);
+
+        if (this.state.queryName.trim() === '') {
+            toast.warn("Searchign form is empty! Please input some text.");
+            return;
+        }
+
+        this.props.onSubmitForApp(this.state.queryName);
+        this.reset();
     }
 
     reset = () => {
         this.setState({
-            name: "",
-            number: "",
+            queryName: '',
         })
     }
 
     render() {
-        // const { name, number } = this.state;
+        // const { queryName } = this.state;
 
         return (
             <SearchBar>
@@ -41,11 +46,12 @@ export class Searchbar extends Component {
 
                     <SearchForm_input
                         type="text"
-                        name="query"
+                        name="queryName"
                         autocomplete="off"
                         autoFocus
                         placeholder="Search images and photos"
-                        onChange={this.handleInput}
+                        value={this.state.queryName}
+                        onChange={this.handleNameChange}
                     />
                 </SearchForm>
             </SearchBar>
