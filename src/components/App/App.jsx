@@ -19,7 +19,7 @@ export class App extends Component {
     return (
       <Application>
         <Searchbar onSubmitForApp={this.handleFormSubmit}/>
-        <ImageGallery />
+        <ImageGallery queryImages={this.state.queryImagesFromSubmit}/>
         <ToastContainer />
         {/* <Modal /> */}
       </Application>

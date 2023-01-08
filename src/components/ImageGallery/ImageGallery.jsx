@@ -11,24 +11,28 @@ export class ImageGallery extends Component {
         isLoading: false,
     }
 
-    async componentDidMount() {
+    async componentDidUpdate(prevProps, prevState) {
         const BASE_URL = 'https://pixabay.com/api';
         const API_KEY = '31433732-587fed4cb039ee24c3149a17c';
         const page = 1;
         const perPage = 12;
-        const searchQuery = 'forest';
+        
+        const prevQueryImages = prevProps.queryImages;
+        const nextQueryImages = this.props.queryImages;
 
-        const URL = `${BASE_URL}/?q=${searchQuery}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=${perPage}`;
+        const URL = `${BASE_URL}/?q=${nextQueryImages}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=${perPage}`;
 
-        this.setState({ isLoading: true });
+        if (prevQueryImages !== nextQueryImages) {
+            this.setState({ isLoading: true, images: null });
 
-        try {
-            const { data } = await axios.get(URL);
-            this.setState({ images: data });
-        } catch (error) {
-            console.log(error)
-        } finally {
-            this.setState({ isLoading: false });
+            try {
+                const { data } = await axios.get(URL);
+                this.setState({ images: data });
+            } catch (error) {
+                console.log(error)
+            } finally {
+                this.setState({ isLoading: false });
+            }
         }
     }
 

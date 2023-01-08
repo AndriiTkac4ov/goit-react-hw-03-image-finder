@@ -4,9 +4,9 @@ import { toast } from 'react-toastify';
 import { SearchBar, SearchForm, SearchForm_button, SearchForm_buttonLabel, SearchForm_input } from "./Searchbar.styled";
 
 export class Searchbar extends Component {
-    // static propTypes = {
-    //     onSubmit: PropTypes.func.isRequired,
-    // };
+    static propTypes = {
+        onSubmit: PropTypes.func,
+    };
     
     state = {
         queryName: '',
@@ -35,7 +35,7 @@ export class Searchbar extends Component {
     }
 
     render() {
-        // const { queryName } = this.state;
+        const { queryName } = this.state;
 
         return (
             <SearchBar>
@@ -50,7 +50,7 @@ export class Searchbar extends Component {
                         autocomplete="off"
                         autoFocus
                         placeholder="Search images and photos"
-                        value={this.state.queryName}
+                        value={queryName}
                         onChange={this.handleNameChange}
                     />
                 </SearchForm>
