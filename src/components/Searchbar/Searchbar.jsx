@@ -2,6 +2,7 @@ import { Component } from "react";
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import { SearchBar, SearchForm, SearchFormButton, SearchFormButtonLabel, SearchFormInput } from "./Searchbar.styled";
+import { FaSearch } from 'react-icons/fa';
 
 export class Searchbar extends Component {
     static propTypes = {
@@ -41,6 +42,7 @@ export class Searchbar extends Component {
             <SearchBar>
                 <SearchForm onSubmit={this.handleSubmit}>
                     <SearchFormButton type="submit">
+                        <FaSearch size={32}/>
                         <SearchFormButtonLabel>Search</SearchFormButtonLabel>
                     </SearchFormButton>
 
