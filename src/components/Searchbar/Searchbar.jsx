@@ -9,33 +9,33 @@ export class Searchbar extends Component {
     };
     
     state = {
-        queryName: '',
+        searchQuery: '',
     }
 
     handleNameChange = event => {
-        this.setState({ queryName: event.currentTarget.value.toLowerCase() });
+        this.setState({ searchQuery: event.currentTarget.value.toLowerCase() });
     }
 
     handleSubmit = event => {
         event.preventDefault();
 
-        if (this.state.queryName.trim() === '') {
+        if (this.state.searchQuery.trim() === '') {
             toast.warn("Searchign form is empty! Please input some text.");
             return;
         }
 
-        this.props.onSubmitForApp(this.state.queryName);
+        this.props.onSubmitForApp(this.state.searchQuery);
         this.reset();
     }
 
     reset = () => {
         this.setState({
-            queryName: '',
+            searchQuery: '',
         })
     }
 
     render() {
-        const { queryName } = this.state;
+        const { searchQuery } = this.state;
 
         return (
             <SearchBar>
@@ -46,11 +46,11 @@ export class Searchbar extends Component {
 
                     <SearchForm_input
                         type="text"
-                        name="queryName"
+                        name="searchQuery"
                         autocomplete="off"
                         autoFocus
                         placeholder="Search images and photos"
-                        value={queryName}
+                        value={searchQuery}
                         onChange={this.handleNameChange}
                     />
                 </SearchForm>
