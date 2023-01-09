@@ -9,7 +9,7 @@ import { Button } from "../Button/Button";
 
 export class ImageGallery extends Component {
     state = {
-        images: null,
+        images: [],
         page: 1,
         isLoading: false,
         // error: null, //if we use fetch
@@ -53,11 +53,13 @@ export class ImageGallery extends Component {
         const nextQueryPage = this.state.page;
 
         if (prevQueryImages !== nextQueryImages) {
-            this.setState({ isLoading: true, images: null, page: 1 });
+            this.setState({ isLoading: true, images: [], page: 1 });
 
             try {
-                const images = await api.fetchImages(nextQueryImages, nextQueryPage);
-                this.setState({ images });
+                if (this.state.page === 1) {
+                    const images = await api.fetchImages(nextQueryImages, nextQueryPage);
+                    this.setState({ images });
+                }
             } catch (error) {
                 console.log(error)
             } finally {
@@ -66,11 +68,13 @@ export class ImageGallery extends Component {
         }
 
         if (prevQueryPage !== nextQueryPage) {
-            this.setState({ isLoading: true, images: null });
+            this.setState({ isLoading: true });
 
             try {
                 const images = await api.fetchImages(nextQueryImages, nextQueryPage);
-                this.setState({ images });
+                this.setState(prevState => ({
+                    images: [...prevState.images, ...images],
+                }));
             } catch (error) {
                 console.log(error)
             } finally {
@@ -94,7 +98,7 @@ export class ImageGallery extends Component {
             <>
                 {/* {this.state.error && <h2>{this.state.error.message}</h2>} */}
                 {isLoading && <Loader />}
-                {images?.length === 0 && this.catchWrongQuery()}
+                {/* {images?.length === 0 && this.catchWrongQuery()} */}
                 <Gallery>
                     {images?.map((image) => (
                         <ImageGalleryItem
