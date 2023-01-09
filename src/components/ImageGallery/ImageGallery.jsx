@@ -12,9 +12,12 @@ export class ImageGallery extends Component {
         images: [],
         page: 1,
         isLoading: false,
+        isPagination: false,
+        isError: false,
         // error: null, //if we use fetch
     }
 
+    // // if we use fetch
     // componentDidUpdate(prevProps, prevState) {
     //     const BASE_URL = 'https://pixabay.com/api';
     //     const API_KEY = '31433732-587fed4cb039ee24c3149a17c';
@@ -53,22 +56,23 @@ export class ImageGallery extends Component {
         const nextQueryPage = this.state.page;
 
         if (prevQueryImages !== nextQueryImages) {
-            this.setState({ isLoading: true, images: [], page: 1 });
+            this.setState({ isLoading: true, isPagination: false, images: [], page: 1 });
 
             try {
                 if (this.state.page === 1) {
                     const images = await api.fetchImages(nextQueryImages, nextQueryPage);
-                    this.setState({ images });
+                    this.setState({ images, isPagination: true });
                 }
             } catch (error) {
-                console.log(error)
+                console.log(error);
+                this.setState({ isError: true });
             } finally {
                 this.setState({ isLoading: false });
             }
         }
 
         if (prevQueryPage !== nextQueryPage) {
-            this.setState({ isLoading: true });
+            this.setState({ isLoading: true, isPagination: true });
 
             try {
                 const images = await api.fetchImages(nextQueryImages, nextQueryPage);
@@ -76,7 +80,8 @@ export class ImageGallery extends Component {
                     images: [...prevState.images, ...images],
                 }));
             } catch (error) {
-                console.log(error)
+                console.log(error);
+                this.setState({ isError: true });
             } finally {
                 this.setState({ isLoading: false });
             }
@@ -84,7 +89,11 @@ export class ImageGallery extends Component {
     }
 
     catchWrongQuery = () => {
-        toast.info("There aren't images by this query.", {position: "top-left"})
+        toast.error("There aren't images by this query.", {position: "top-left"})
+    }
+
+    catchLastImages = () => {
+        toast.info("There aren't images more.", {position: "top-center"})
     }
 
     handleLoadMore = () => {
@@ -92,13 +101,15 @@ export class ImageGallery extends Component {
     }
 
     render() {
-        const { images, isLoading } = this.state;
+        const { images, isLoading, isPagination, isError } = this.state;
 
         return (
             <>
-                {/* {this.state.error && <h2>{this.state.error.message}</h2>} */}
+                {/* {this.state.error && <h2>{this.state.error.message}</h2> //if we use fetch} */}
                 {isLoading && <Loader />}
+                {isError && toast.error("We have error.")}
                 {/* {images?.length === 0 && this.catchWrongQuery()} */}
+                {/* {images?.length / this.state.page < 12 && this.catchLastImages()} */}
                 <Gallery>
                     {images?.map((image) => (
                         <ImageGalleryItem
@@ -107,7 +118,7 @@ export class ImageGallery extends Component {
                         />
                     ))}
                 </Gallery>
-                <Button onClickLoadMore={this.handleLoadMore} />
+                {isPagination && <Button onClickLoadMore={this.handleLoadMore} />}
             </>
         )
     }
