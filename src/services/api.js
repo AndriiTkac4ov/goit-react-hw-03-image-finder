@@ -9,5 +9,8 @@ export const fetchImages = async (searchQuery, searchPage = 1) => {
     const response = await axios.get(URL);
     return response.data.hits;
 }
+const api = {
+    fetchImages
+}
 
-export default { fetchImages };
+export default api;

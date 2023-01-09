@@ -1,7 +1,7 @@
 import { Component } from "react";
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
-import { SearchBar, SearchForm, SearchForm_button, SearchForm_buttonLabel, SearchForm_input } from "./Searchbar.styled";
+import { SearchBar, SearchForm, SearchFormButton, SearchFormButtonLabel, SearchFormInput } from "./Searchbar.styled";
 
 export class Searchbar extends Component {
     static propTypes = {
@@ -40,11 +40,11 @@ export class Searchbar extends Component {
         return (
             <SearchBar>
                 <SearchForm onSubmit={this.handleSubmit}>
-                    <SearchForm_button type="submit">
-                        <SearchForm_buttonLabel>Search</SearchForm_buttonLabel>
-                    </SearchForm_button>
+                    <SearchFormButton type="submit">
+                        <SearchFormButtonLabel>Search</SearchFormButtonLabel>
+                    </SearchFormButton>
 
-                    <SearchForm_input
+                    <SearchFormInput
                         type="text"
                         name="searchQuery"
                         autocomplete="off"

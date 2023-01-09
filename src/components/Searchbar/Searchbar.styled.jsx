@@ -28,7 +28,7 @@ export const SearchForm = styled.form`
     overflow: hidden;
 `;
 
-export const SearchForm_button = styled.button`
+export const SearchFormButton = styled.button`
     display: inline-block;
     width: 48px;
     height: 48px;
@@ -47,7 +47,7 @@ export const SearchForm_button = styled.button`
     }
 `;
 
-export const SearchForm_buttonLabel = styled.span`
+export const SearchFormButtonLabel = styled.span`
     position: absolute;
     width: 1px;
     height: 1px;
@@ -59,7 +59,7 @@ export const SearchForm_buttonLabel = styled.span`
     border: 0;
 `;
 
-export const SearchForm_input = styled.input`
+export const SearchFormInput = styled.input`
     display: inline-block;
     width: 100%;
     font: inherit;

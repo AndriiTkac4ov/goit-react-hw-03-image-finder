@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { GalleryItem, GalleryItem_image } from "./ImageGalleryItem.styled";
+import { GalleryItem, GalleryItemImage } from "./ImageGalleryItem.styled";
 import { Modal } from "../Modal/Modal";
 
 export class ImageGalleryItem extends Component {
@@ -19,7 +19,7 @@ export class ImageGalleryItem extends Component {
         return (
             <>
                 <GalleryItem onClick={this.toggleModal}>
-                    <GalleryItem_image src={webformatURL} alt={tags} />
+                    <GalleryItemImage src={webformatURL} alt={tags} />
                 </GalleryItem>
                 {showModal && <Modal
                     largeImageURL={largeImageURL}
