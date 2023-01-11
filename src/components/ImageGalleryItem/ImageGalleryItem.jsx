@@ -4,6 +4,14 @@ import { GalleryItem, GalleryItemImage } from "./ImageGalleryItem.styled";
 import { Modal } from "../Modal/Modal";
 
 export class ImageGalleryItem extends Component {
+    static propTypes = {
+        image: PropTypes.shape({
+            webformatURL: PropTypes.string.isRequired,
+            largeImageURL: PropTypes.string.isRequired,
+            tags: PropTypes.string.isRequired,
+        }).isRequired
+    }
+
     state = {
         showModal: false,
     }
@@ -29,12 +37,4 @@ export class ImageGalleryItem extends Component {
             </>
         )
     }
-}
-
-ImageGalleryItem.propTypes = {
-    image: PropTypes.shape({
-        webformatURL: PropTypes.string.isRequired,
-        largeImageURL: PropTypes.string.isRequired,
-        tags: PropTypes.string.isRequired,
-    }).isRequired
 }

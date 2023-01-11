@@ -8,11 +8,14 @@ import { ImageGalleryItem } from "../ImageGalleryItem/ImageGalleryItem";
 import { Button } from "../Button/Button";
 
 export class ImageGallery extends Component {
+    static propTypes = {
+        queryImages: PropTypes.string.isRequired,
+    }
+
     state = {
         images: [],
         page: 1,
         isLoading: false,
-        isPagination: false,
         isError: false,
         // error: null, //if we use fetch
     }
@@ -56,12 +59,17 @@ export class ImageGallery extends Component {
         const nextQueryPage = this.state.page;
 
         if (prevQueryImages !== nextQueryImages) {
-            this.setState({ isLoading: true, isPagination: false, images: [], page: 1 });
+            this.setState({ isLoading: true, images: [], page: 1 });
 
             try {
                 if (this.state.page === 1) {
-                    const images = await api.fetchImages(nextQueryImages, nextQueryPage);
-                    this.setState({ images, isPagination: true });
+                    let images = await api.fetchImages(nextQueryImages, nextQueryPage);
+                    images = images.map(image => {
+                        return image = {
+                            id: image.id, largeImageURL: image.largeImageURL, webformatURL: image.webformatURL, tags: image.tags
+                        }
+                    });
+                    this.setState({ images });
                 }
             } catch (error) {
                 console.log(error);
@@ -72,10 +80,15 @@ export class ImageGallery extends Component {
         }
 
         if (prevQueryPage !== nextQueryPage) {
-            this.setState({ isLoading: true, isPagination: true });
+            this.setState({ isLoading: true });
 
             try {
-                const images = await api.fetchImages(nextQueryImages, nextQueryPage);
+                let images = await api.fetchImages(nextQueryImages, nextQueryPage);
+                images = images.map(image => {
+                    return image = {
+                        id: image.id, largeImageURL: image.largeImageURL, webformatURL: image.webformatURL, tags: image.tags
+                    }
+                });
                 this.setState(prevState => ({
                     images: [...prevState.images, ...images],
                 }));
@@ -101,15 +114,14 @@ export class ImageGallery extends Component {
     }
 
     render() {
-        const { images, isLoading, isPagination, isError } = this.state;
+        const { images, isLoading, isError } = this.state;
 
         return (
             <>
                 {/* {this.state.error && <h2>{this.state.error.message}</h2> //if we use fetch} */}
-                {isLoading && <Loader />}
-                {isError && toast.error("We have error.")}
                 {/* {images?.length === 0 && this.catchWrongQuery()} */}
                 {/* {images?.length / this.state.page < 12 && this.catchLastImages()} */}
+                {images?.length !== 0 &&
                 <Gallery>
                     {images?.map((image) => (
                         <ImageGalleryItem
@@ -117,15 +129,17 @@ export class ImageGallery extends Component {
                             image={image}
                         />
                     ))}
-                </Gallery>
-                {isPagination && <Button onClickLoadMore={this.handleLoadMore} />}
+                </Gallery>}
+                {isLoading && <Loader />}
+                {!isLoading && images?.length!== 0 && <Button onClickLoadMore={this.handleLoadMore} />}
+                {isError && toast.error("We have error.")}
             </>
         )
     }
 }
 
-ImageGallery.propTypes = {
-    images: PropTypes.arrayOf({
+ImageGalleryItem.propTypes = {
+    image: PropTypes.shape({
         id: PropTypes.number.isRequired,
-    })
+    }).isRequired
 }

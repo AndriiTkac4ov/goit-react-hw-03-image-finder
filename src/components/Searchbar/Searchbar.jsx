@@ -6,8 +6,8 @@ import { FaSearch } from 'react-icons/fa';
 
 export class Searchbar extends Component {
     static propTypes = {
-        onSubmit: PropTypes.func,
-    };
+        onSubmitForApp: PropTypes.func.isRequired,
+    }
     
     state = {
         searchQuery: '',
